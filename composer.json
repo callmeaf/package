@@ -1,0 +1,22 @@
+{
+    "name": "callmeaf/package",
+    "description": "Manage Packages",
+    "type": "library",
+    "require": {
+        "callmeaf/base": "dev-master",
+        "callmeaf/product": "dev-master"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Callmeaf\\Package\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "alikhoshkar",
+            "email": "alikhoshkar2000@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}

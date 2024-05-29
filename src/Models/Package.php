@@ -1,0 +1,51 @@
+<?php
+
+namespace Callmeaf\Package\Models;
+
+use Callmeaf\Base\Contracts\HasEnum;
+use Callmeaf\Base\Contracts\HasResponseTitles;
+use Callmeaf\Base\Traits\HasDate;
+use Callmeaf\Base\Traits\HasStatus;
+use Callmeaf\Base\Traits\HasType;
+use Callmeaf\Package\Enums\PackageType;
+use Callmeaf\Product\Enums\ProductStatus;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Log;
+
+
+class Package extends Model implements HasResponseTitles,HasEnum
+{
+    use HasDate,HasStatus,HasType;
+    protected $fillable = [
+        'product_id',
+        'type',
+        'deadline',
+    ];
+
+    protected $casts = [
+        'status' => ProductStatus::class,
+        'type' => PackageType::class,
+    ];
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(config('callmeaf-product.model'),'product_id','id');
+    }
+
+    public function responseTitles(string $key,string $default = ''): string
+    {
+        $product = $this->product()->select(['title'])->first();
+        return [
+            'store' => $product?->title ?? $default,
+            'update' => $product?->title ?? $default,
+            'status_update' => $product?->title ?? $default,
+            'destroy' => $product?->title ?? $default,
+        ][$key];
+    }
+
+    public static function enumsLang(): array
+    {
+        return __('callmeaf-product::enums');
+    }
+}
