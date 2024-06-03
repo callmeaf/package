@@ -4,22 +4,16 @@ namespace Callmeaf\Package\Http\Controllers\V1\Api;
 
 use Callmeaf\Base\Http\Controllers\V1\Api\ApiController;
 use Callmeaf\Package\Events\PackageDestroyed;
-use Callmeaf\Package\Events\PackageForceDestroyed;
 use Callmeaf\Package\Events\PackageIndexed;
-use Callmeaf\Package\Events\PackageRestored;
 use Callmeaf\Package\Events\PackageShowed;
 use Callmeaf\Package\Events\PackageStatusUpdated;
 use Callmeaf\Package\Events\PackageStored;
-use Callmeaf\Package\Events\PackageTrashed;
 use Callmeaf\Package\Events\PackageUpdated;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageDestroyRequest;
-use Callmeaf\Package\Http\Requests\V1\Api\PackageForceDestroyRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageIndexRequest;
-use Callmeaf\Package\Http\Requests\V1\Api\PackageRestoreRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageShowRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageStatusUpdateRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageStoreRequest;
-use Callmeaf\Package\Http\Requests\V1\Api\PackageTrashedIndexRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageUpdateRequest;
 use Callmeaf\Package\Models\Package;
 use Callmeaf\Package\Services\V1\PackageService;
@@ -60,10 +54,7 @@ class PackageController extends ApiController
     public function store(PackageStoreRequest $request)
     {
         try {
-            $data = $request->validated();
-            $product = $this->productService->create(data: $data)->getModel();
-            $data['product_id'] = $product->id;
-            $package = $this->packageService->create(data: $data,events: [
+            $package = $this->packageService->create(data: $request->validated(),events: [
                 PackageStored::class
             ])->getModel(asResource: true,attributes: config('callmeaf-package.resources.store.attributes'),relations: config('callmeaf-package.resources.store.relations'));
             return apiResponse([
@@ -100,10 +91,7 @@ class PackageController extends ApiController
     public function update(PackageUpdateRequest $request,Package $package)
     {
         try {
-            $data = $request->validated();
-            $product = $this->productService->setModel($package->product)->update(data: $data)->getModel();
-            $data['product_id'] = $product->id;
-            $package = $this->packageService->setModel($package)->update(data: $data,events: [
+            $package = $this->packageService->setModel($package)->update(data: $request->validated(),events: [
                 PackageUpdated::class,
             ])->getModel(asResource: true,attributes: config('callmeaf-package.resources.update.attributes'),relations: config('callmeaf-package.resources.update.relations'));
             return apiResponse([

@@ -17,14 +17,8 @@ class PackageFormRequestValidator extends FormRequestValidator
    public function store(): array
    {
        return [
-           'status' => true,
+           'product_id' => true,
            'type' => true,
-           'title' => true,
-           'slug' => true,
-           'summary' => false,
-           'content' => false,
-           'published_at' => false,
-           'expired_at' => false,
            'deadline' => false,
        ];
    }
@@ -37,14 +31,7 @@ class PackageFormRequestValidator extends FormRequestValidator
    public function update(): array
    {
        return [
-           'status' => true,
            'type' => true,
-           'title' => true,
-           'slug' => true,
-           'summary' => false,
-           'content' => false,
-           'published_at' => false,
-           'expired_at' => false,
            'deadline' => false,
        ];
    }

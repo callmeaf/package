@@ -21,12 +21,6 @@ return [
         \Callmeaf\Package\Events\PackageDestroyed::class => [
             // listeners
         ],
-        \Callmeaf\Package\Events\PackageRestored::class => [
-            // listeners
-        ],
-        \Callmeaf\Package\Events\PackageForceDestroyed::class => [
-            // listeners
-        ],
     ],
     'validations' => [
         'package' => \Callmeaf\Package\Utilities\V1\Package\Api\PackageFormRequestValidator::class,
