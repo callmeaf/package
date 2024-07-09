@@ -29,8 +29,8 @@ class PackageResource extends JsonResource
             'created_at_text' => fn() => $this->createdAtText,
             'updated_at' => fn() => $this->updated_at,
             'updated_at_text' => fn() => $this->updatedAtText,
-            'image' => fn() => new (config('callmeaf-media.model_resource'))($this->image,only: $this->only['!image'] ?? []),
-            'product' => fn() => new (config('callmeaf-product.model_resource'))($this->product,only: $this->only['!product'] ?? []),
+            'image' => fn() => $this->image ? new (config('callmeaf-media.model_resource'))($this->image,only: $this->only['!image'] ?? []) : null,
+            'product' => fn() => $this->product ? new (config('callmeaf-product.model_resource'))($this->product,only: $this->only['!product'] ?? []) : null,
         ],only: $this->only);
     }
 }

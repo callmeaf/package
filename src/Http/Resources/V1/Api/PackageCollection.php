@@ -32,8 +32,8 @@ class PackageCollection extends ResourceCollection
                     'created_at_text' => fn() => $package->createdAtText,
                     'updated_at' => fn() => $package->updated_at,
                     'updated_at_text' => fn() => $package->updatedAtText,
-                    'image' => fn() => new (config('callmeaf-media.model_resource'))($package->image,only: $this->only['!image'] ?? []),
-                    'product' => fn() => new (config('callmeaf-product.model_resource'))($package->product,only: $this->only['!product'] ?? []),
+                    'image' => fn() => $package->image ? new (config('callmeaf-media.model_resource'))($package->image,only: $this->only['!image'] ?? []) : null,
+                    'product' => fn() => $package->product ? new (config('callmeaf-product.model_resource'))($package->product,only: $this->only['!product'] ?? []) : null,
                 ],only: $this->only);
             }),
         ];
