@@ -17,6 +17,7 @@ use Callmeaf\Package\Http\Requests\V1\Api\PackageStoreRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageUpdateRequest;
 use Callmeaf\Package\Models\Package;
 use Callmeaf\Package\Services\V1\PackageService;
+use Callmeaf\Package\Utilities\V1\Package\Api\PackageResources;
 use Callmeaf\Product\Services\V1\ProductService;
 use Illuminate\Support\Facades\Log;
 
@@ -24,24 +25,27 @@ class PackageController extends ApiController
 {
     protected PackageService $packageService;
     protected ProductService $productService;
+    protected PackageResources $packageResources;
     public function __construct()
     {
         app(config('callmeaf-package.middlewares.package'))($this);
         $this->packageService = app(config('callmeaf-package.service'));
         $this->productService = app(config('callmeaf-product.service'));
+        $this->packageResources = app(config('callmeaf-package.resources.package'));
     }
 
     public function index(PackageIndexRequest $request)
     {
         try {
+            $resources = $this->packageResources->index();
             $packages = $this->packageService->all(
-                relations: config('callmeaf-package.resources.index.relations'),
-                columns: config('callmeaf-package.resources.index.columns'),
+                relations: $resources->relations(),
+                columns: $resources->columns(),
                 filters: $request->validated(),
                 events: [
                     PackageIndexed::class,
                 ],
-            )->getCollection(asResourceCollection: true,asResponseData: true,attributes: config('callmeaf-package.resources.index.attributes'));
+            )->getCollection(asResourceCollection: true,asResponseData: true,attributes: $resources->attributes());
             return apiResponse([
                 'packages' => $packages,
             ],__('callmeaf-base::v1.successful_loaded'));
@@ -54,9 +58,10 @@ class PackageController extends ApiController
     public function store(PackageStoreRequest $request)
     {
         try {
+            $resources = $this->packageResources->store();
             $package = $this->packageService->create(data: $request->validated(),events: [
                 PackageStored::class
-            ])->getModel(asResource: true,attributes: config('callmeaf-package.resources.store.attributes'),relations: config('callmeaf-package.resources.store.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'package' => $package,
             ],__('callmeaf-base::v1.successful_created', [
@@ -71,10 +76,11 @@ class PackageController extends ApiController
     public function show(PackageShowRequest $request,Package $package)
     {
         try {
+            $resources = $this->packageResources->show();
             $package = $this->packageService->setModel($package)->getModel(
                 asResource: true,
-                attributes: config('callmeaf-package.resources.show.attributes'),
-                relations: config('callmeaf-package.resources.show.relations'),
+                attributes: $resources->attributes(),
+                relations: $resources->relations(),
                 events: [
                     PackageShowed::class,
                 ],
@@ -91,9 +97,10 @@ class PackageController extends ApiController
     public function update(PackageUpdateRequest $request,Package $package)
     {
         try {
+            $resources = $this->packageResources->update();
             $package = $this->packageService->setModel($package)->update(data: $request->validated(),events: [
                 PackageUpdated::class,
-            ])->getModel(asResource: true,attributes: config('callmeaf-package.resources.update.attributes'),relations: config('callmeaf-package.resources.update.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'package' => $package,
             ],__('callmeaf-base::v1.successful_updated', [
@@ -108,10 +115,11 @@ class PackageController extends ApiController
     public function statusUpdate(PackageStatusUpdateRequest $request,Package $package)
     {
         try {
+            $resources = $this->packageResources->statusUpdate();
             $this->productService->setModel($package->product)->update([
                 'status' => $request->get('status'),
             ]);
-            $package = $this->packageService->setModel($package->load('product'))->getModel(asResource: true,attributes: config('callmeaf-package.resources.status_update.attributes'),relations: config('callmeaf-package.resources.status_update.relations'),events: [
+            $package = $this->packageService->setModel($package->load('product'))->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations(),events: [
                 PackageStatusUpdated::class
             ]);
             return apiResponse([
@@ -128,8 +136,9 @@ class PackageController extends ApiController
     public function destroy(PackageDestroyRequest $request,Package $package)
     {
         try {
+            $resources = $this->packageResources->destroy();
             $this->productService->setModel($package->product)->forceDelete();
-            $package = $this->packageService->setModel($package)->getModel(asResource: true,attributes: config('callmeaf-package.resources.destroy.attributes'),events: [
+            $package = $this->packageService->setModel($package)->getModel(asResource: true,attributes: $resources->attributes(),events: [
                 PackageDestroyed::class,
             ]);
             return apiResponse([
