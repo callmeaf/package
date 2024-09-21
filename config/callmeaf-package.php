@@ -23,19 +23,19 @@ return [
         ],
     ],
     'validations' => [
-        'package' => \Callmeaf\Package\Utilities\V1\Package\Api\PackageFormRequestValidator::class,
+        'package' => \Callmeaf\Package\Utilities\V1\Api\Package\PackageFormRequestValidator::class,
     ],
     'resources' => [
-        'package' => \Callmeaf\Package\Utilities\V1\Package\Api\PackageResources::class,
+        'package' => \Callmeaf\Package\Utilities\V1\Api\Package\PackageResources::class,
     ],
     'controllers' => [
         'packages' => \Callmeaf\Package\Http\Controllers\V1\Api\PackageController::class,
     ],
     'form_request_authorizers' => [
-        'package' => \Callmeaf\Package\Utilities\V1\Package\Api\PackageFormRequestAuthorizer::class,
+        'package' => \Callmeaf\Package\Utilities\V1\Api\Package\PackageFormRequestAuthorizer::class,
     ],
     'middlewares' => [
-        'package' => \Callmeaf\Package\Utilities\V1\Package\Api\PackageControllerMiddleware::class,
+        'package' => \Callmeaf\Package\Utilities\V1\Api\Package\PackageControllerMiddleware::class,
     ],
-    'searcher' => \Callmeaf\Package\Utilities\V1\Package\Api\PackageSearcher::class,
+    'searcher' => \Callmeaf\Package\Utilities\V1\Api\Package\PackageSearcher::class,
 ];

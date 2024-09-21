@@ -1,6 +1,6 @@
 <?php
 
-namespace Callmeaf\Package\Utilities\V1\Package\Api;
+namespace Callmeaf\Package\Utilities\V1\Api\Package;
 
 use Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface;
 use Illuminate\Database\Eloquent\Builder;

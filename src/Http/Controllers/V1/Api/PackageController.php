@@ -2,6 +2,7 @@
 
 namespace Callmeaf\Package\Http\Controllers\V1\Api;
 
+use Callmeaf\Base\Enums\ResponseTitle;
 use Callmeaf\Base\Http\Controllers\V1\Api\ApiController;
 use Callmeaf\Package\Events\PackageDestroyed;
 use Callmeaf\Package\Events\PackageIndexed;
@@ -17,9 +18,8 @@ use Callmeaf\Package\Http\Requests\V1\Api\PackageStoreRequest;
 use Callmeaf\Package\Http\Requests\V1\Api\PackageUpdateRequest;
 use Callmeaf\Package\Models\Package;
 use Callmeaf\Package\Services\V1\PackageService;
-use Callmeaf\Package\Utilities\V1\Package\Api\PackageResources;
+use Callmeaf\Package\Utilities\V1\Api\Package\PackageResources;
 use Callmeaf\Product\Services\V1\ProductService;
-use Illuminate\Support\Facades\Log;
 
 class PackageController extends ApiController
 {
@@ -65,7 +65,7 @@ class PackageController extends ApiController
             return apiResponse([
                 'package' => $package,
             ],__('callmeaf-base::v1.successful_created', [
-                'title' => $package->responseTitles('store'),
+                'title' => $package->responseTitles(ResponseTitle::STORE),
             ]));
         } catch (\Exception $exception) {
             report($exception);
@@ -104,7 +104,7 @@ class PackageController extends ApiController
             return apiResponse([
                 'package' => $package,
             ],__('callmeaf-base::v1.successful_updated', [
-                'title' =>  $package->responseTitles('update')
+                'title' =>  $package->responseTitles(ResponseTitle::UPDATE)
             ]));
         } catch (\Exception $exception) {
             report($exception);
@@ -125,7 +125,7 @@ class PackageController extends ApiController
             return apiResponse([
                 'package' => $package,
             ],__('callmeaf-base::v1.successful_updated', [
-                'title' =>  $package->responseTitles('status_update')
+                'title' =>  $package->responseTitles(ResponseTitle::STATUS_UPDATE)
             ]));
         } catch (\Exception $exception) {
             report($exception);
@@ -144,7 +144,7 @@ class PackageController extends ApiController
             return apiResponse([
                 'package' => $package,
             ],__('callmeaf-base::v1.successful_deleted', [
-                'title' =>  $package->responseTitles('destroy',$package->product->title)
+                'title' =>  $package->responseTitles(ResponseTitle::DESTROY,$package->product->title)
             ]));
         } catch (\Exception $exception) {
             report($exception);

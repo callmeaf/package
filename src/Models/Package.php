@@ -4,6 +4,7 @@ namespace Callmeaf\Package\Models;
 
 use Callmeaf\Base\Contracts\HasEnum;
 use Callmeaf\Base\Contracts\HasResponseTitles;
+use Callmeaf\Base\Enums\ResponseTitle;
 use Callmeaf\Base\Traits\HasDate;
 use Callmeaf\Base\Traits\HasStatus;
 use Callmeaf\Base\Traits\HasType;
@@ -33,7 +34,7 @@ class Package extends Model implements HasResponseTitles,HasEnum
         return $this->belongsTo(config('callmeaf-product.model'),'product_id','id');
     }
 
-    public function responseTitles(string $key,string $default = ''): string
+    public function responseTitles(ResponseTitle|string $key,string $default = ''): string
     {
         $product = $this->product()->select(['title'])->first();
         return [
@@ -41,7 +42,7 @@ class Package extends Model implements HasResponseTitles,HasEnum
             'update' => $product?->title ?? $default,
             'status_update' => $product?->title ?? $default,
             'destroy' => $product?->title ?? $default,
-        ][$key];
+        ][$key instanceof ResponseTitle ? $key->value : $key];
     }
 
     public static function enumsLang(): array
