@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(config('callmeaf-product.model'),'product_id')->constrained(getTableName(config('callmeaf-product.model')))->cascadeOnDelete();
+            $table->foreignIdFor(config('callmeaf-product.model'))->constrained(getTableName(config('callmeaf-product.model')))->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->string('deadline')->nullable();
             $table->timestamps();

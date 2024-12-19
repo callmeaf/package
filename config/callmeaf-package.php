@@ -9,7 +9,13 @@ return [
         //
     ],
     'events' => [
+        \Callmeaf\Package\Events\PackageIndexed::class => [
+            // listeners
+        ],
         \Callmeaf\Package\Events\PackageStored::class => [
+            // listeners
+        ],
+        \Callmeaf\Package\Events\PackageShowed::class => [
             // listeners
         ],
         \Callmeaf\Package\Events\PackageUpdated::class => [
