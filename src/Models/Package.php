@@ -9,10 +9,8 @@ use Callmeaf\Base\Traits\HasDate;
 use Callmeaf\Base\Traits\HasStatus;
 use Callmeaf\Base\Traits\HasType;
 use Callmeaf\Package\Enums\PackageType;
-use Callmeaf\Product\Enums\ProductStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Log;
 
 
 class Package extends Model implements HasResponseTitles,HasEnum
@@ -25,7 +23,6 @@ class Package extends Model implements HasResponseTitles,HasEnum
     ];
 
     protected $casts = [
-        'status' => ProductStatus::class,
         'type' => PackageType::class,
     ];
 
