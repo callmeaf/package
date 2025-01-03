@@ -28,10 +28,14 @@ class PackageController extends ApiController
     protected PackageResources $packageResources;
     public function __construct()
     {
-        app(config('callmeaf-package.middlewares.package'))($this);
         $this->packageService = app(config('callmeaf-package.service'));
         $this->productService = app(config('callmeaf-product.service'));
         $this->packageResources = app(config('callmeaf-package.resources.package'));
+    }
+
+    public static function middleware(): array
+    {
+        return app(config('callmeaf-package.middlewares.package'))();
     }
 
     public function index(PackageIndexRequest $request)
